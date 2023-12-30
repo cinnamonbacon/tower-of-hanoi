@@ -1,0 +1,30 @@
+div{
+    display: grid;
+    column-gap: 10px;
+}
+
+.stacks{
+    display: flex;
+}
+
+#block1{
+    fill: rgb(80,0,0);
+}
+
+#block2{
+    fill: rgb(0, 80, 0);
+}
+
+#block3{
+    fill: rgb(0, 0, 80);
+}
+
+.block{
+    stroke: black;
+    stroke-width: 5;
+    opacity:.7;
+}
+
+.bottom{
+   stroke: black; 
+}
