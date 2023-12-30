@@ -7,6 +7,10 @@ div{
     display: flex;
 }
 
+.empty{
+    opacity: 0;
+}
+
 #block1{
     fill: rgb(80,0,0);
 }
