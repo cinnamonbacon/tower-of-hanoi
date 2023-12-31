@@ -7,8 +7,9 @@ let stacks = [[-1,1,2,3,4,5],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1]];
 let max = 5;
 let selected = -1;
 let acting = false;
+let sleepTime = 100;
 const visual = document.getElementById("stacks");
-const FrameSpeed = 10;
+var FrameSpeed;
 
 
 async function makeHTML(){
@@ -55,6 +56,7 @@ function setup() {
         stacks[2][i] = -1
     }
     makeHTML();
+    FrameSpeed = 50/max;
 }
 
 
@@ -157,23 +159,31 @@ async function simulate(){
     acting = true;
     await solveTower(max,(x)=>x);
     acting = false;
+    sleepTime = 100;
+    FrameSpeed = 50/(stacks[0]-1);
 }
 
 async function solveTower(n,f){
     if(n==1){
+        await sleep (sleepTime)
         await pickup(f(0));
-        await sleep (100);
+        await sleep (sleepTime);
         await place(f(0),f(2));
-        await sleep (100);
+        await sleep (sleepTime);
     }else{
         await solveTower(n-1,(x)=>f(swap1(x)));
-        await sleep (100);
+        sleepTime/=1.5;
+        FrameSpeed/=1.5;
+        await sleep (sleepTime);
         await pickup(f(0));
-        await sleep (100);
+        await sleep (sleepTime);
         await place(f(0),f(2));
-        await sleep (100);
+        await sleep (sleepTime);
         await solveTower(n-1,(x)=>f(swap2(x)));
-        await sleep (100);
+
+        sleepTime/=1.5;
+        FrameSpeed/=1.5;
+        //await sleep (sleepTime);
     }
 }
 
