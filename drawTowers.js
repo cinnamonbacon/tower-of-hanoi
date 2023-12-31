@@ -3,8 +3,8 @@ function sleep(ms = 0) {
 }
 
 
-let stacks = [[-1,1,2,3],[-1,-1,-1,-1],[-1,-1,-1,-1]];
-let max = 3;
+let stacks = [[-1,1,2,3,4,5],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1]];
+let max = 5;
 let selected = -1;
 let acting = false;
 const visual = document.getElementById("stacks");
@@ -22,7 +22,7 @@ async function makeHTML(){
         for(let j=0; j<stacks[0].length; j++){
             const block = stacks[i][j];
             if(block>0){
-                ctx.fillRect((100-30*(block/max)),25+30*j,30+(60*(block/max)),20);
+                ctx.fillRect((110-60*(block/max)),25+30*j,10+(120*(block/max)),20);
             }
         }
         ctx.fillRect(5,25+30*stacks[0].length,220,5);
@@ -32,9 +32,25 @@ async function makeHTML(){
 
 }
 
-document.addEventListener("click", (event) => {
+function setup() {
+    max = parseInt(document.getElementById("num").value);
+    stacks = [];
+    stacks[0]=[];
+    stacks[1]=[];
+    stacks[2]=[];
+
+    stacks[0][0]=-1;
+    stacks[1][0]=-1;
+    stacks[2][0]=-1;
+
+    console.log(max);
+    for(var i=1; i<=max;i++){
+        stacks[0][i] = i
+        stacks[1][i] = -1
+        stacks[2][i] = -1
+    }
     makeHTML();
-});
+}
 
 
 async function controlClick(s){
