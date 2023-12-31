@@ -1,12 +1,17 @@
+function sleep(ms = 0) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 let stacks = [[-1,1,2,3],[-1,-1,-1,-1],[-1,-1,-1,-1]];
 let max = 3;
 let selected = -1;
 let acting = false;
 const visual = document.getElementById("stacks");
+const FrameSpeed = 10;
 
 
-
-function makeHTML(){
+async function makeHTML(){
     document.getElementById("main").innerHTML="";
     for(let i=0; i<stacks.length; i++){
         var canvas = document.createElement("canvas");
@@ -23,7 +28,6 @@ function makeHTML(){
         ctx.fillRect(5,25+30*stacks[0].length,220,5);
         canvas.addEventListener("click", (event) => {controlClick(i)})
         document.getElementById("main").appendChild(canvas);
-        console.log(canvas);
     }
 
 }
@@ -33,7 +37,7 @@ document.addEventListener("click", (event) => {
 });
 
 
-function controlClick(s){
+async function controlClick(s){
     if(acting == true){
         return;
     }
@@ -67,7 +71,7 @@ function controlClick(s){
     place(selected, selected)
 }
 
-function pickup(s){
+async function pickup(s){
     var n=1
     while(n>=1 && n<stacks[0].length){
         if(stacks[s][n]<0){
@@ -77,6 +81,7 @@ function pickup(s){
             stacks[s][n]=-1;
             n--;
             makeHTML();
+            await sleep(FrameSpeed);
         }
     }
     if(n==0){
@@ -84,25 +89,28 @@ function pickup(s){
     }
 }
 
-function place(s1, s2){
+async function place(s1, s2){
     if(s1==s2){
         var n=1
         while(n<stacks[0].length && stacks[s1][n]<0){
+            await sleep(FrameSpeed);
             stacks[s1][n]=stacks[s1][n-1];
             stacks[s1][n-1]=-1
             n++;
+            makeHTML();
         }
-        console.log(n);
-        makeHTML();
     }else if(Math.abs(s1-s2)==2){
+        await sleep(2*FrameSpeed);
         stacks[1][0]=stacks[s1][0];
         stacks[s1][0]=-1
         makeHTML();
+        await sleep(2*FrameSpeed);
         stacks[s2][0]=stacks[1][0];
         stacks[1][0]=-1
         makeHTML();
         place(s2,s2);
     }else{
+        await sleep(2*FrameSpeed);
         stacks[s2][0]=stacks[s1][0];
         stacks[s1][0]=-1
         makeHTML();
