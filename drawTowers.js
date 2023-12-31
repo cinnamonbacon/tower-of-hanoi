@@ -29,6 +29,12 @@ async function makeHTML(){
         canvas.addEventListener("click", (event) => {controlClick(i)})
         document.getElementById("main").appendChild(canvas);
     }
+    var button = document.createElement("button");
+    button.type = "button";
+    button.innerText = "simulate";
+    button.addEventListener("click", (event) => {simulate()})
+    document.getElementById("main").appendChild(button);
+
 
 }
 
@@ -43,7 +49,6 @@ function setup() {
     stacks[1][0]=-1;
     stacks[2][0]=-1;
 
-    console.log(max);
     for(var i=1; i<=max;i++){
         stacks[0][i] = i
         stacks[1][i] = -1
@@ -127,10 +132,67 @@ async function place(s1, s2){
         place(s2,s2);
     }else{
         await sleep(2*FrameSpeed);
+        console.log(s2);
         stacks[s2][0]=stacks[s1][0];
         stacks[s1][0]=-1
         makeHTML();
         place(s2,s2);
     }
     selected = -1;
+}
+
+
+async function simulate(){
+    
+    stacks[0][0]=-1;
+    stacks[1][0]=-1;
+    stacks[2][0]=-1;
+
+    for(var i=1; i<=max;i++){
+        stacks[0][i] = i
+        stacks[1][i] = -1
+        stacks[2][i] = -1
+    }
+    makeHTML();
+    acting = true;
+    await solveTower(max,(x)=>x);
+    acting = false;
+}
+
+async function solveTower(n,f){
+    if(n==1){
+        await pickup(f(0));
+        await sleep (100);
+        await place(f(0),f(2));
+        await sleep (100);
+    }else{
+        await solveTower(n-1,(x)=>f(swap1(x)));
+        await sleep (100);
+        await pickup(f(0));
+        await sleep (100);
+        await place(f(0),f(2));
+        await sleep (100);
+        await solveTower(n-1,(x)=>f(swap2(x)));
+        await sleep (100);
+    }
+}
+
+function swap1(a){
+    if(a == 0){
+        return 0;
+    }if(a == 1){
+        return 2;
+    }if(a == 2){
+        return 1;
+    }
+}
+
+function swap2(a){
+    if(a == 0){
+        return 1;
+    }if(a == 1){
+        return 0;
+    }if(a == 2){
+        return 2;
+    }
 }
